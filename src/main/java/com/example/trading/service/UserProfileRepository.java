@@ -13,8 +13,5 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Intege
     @Query(value = "select count(*) from user_profile ", nativeQuery = true)
     int countId ();
 
-
-
-
 }
 

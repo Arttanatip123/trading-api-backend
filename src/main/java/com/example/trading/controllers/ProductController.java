@@ -40,14 +40,12 @@ public class ProductController {
 
     @GetMapping("/detail/{idProduct}")
     public Object detail(@PathVariable int  idProduct){
-
         return productRepository.findById(idProduct);
     }
     
     @GetMapping("/findbyiduser")
     public Object listId(@RequestParam int userId) {
         List<Product> product = productRepository.findAllByIdUserShop(userId);
-        //System.out.println(product);
         return product;
     }
 

@@ -8,7 +8,10 @@ import com.sun.xml.bind.v2.TODO;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -39,6 +42,11 @@ public class UserProfileController {
         return userProfileRepository.findById(userId).get();
     }
 
+    @PostMapping("/user_detail")
+    public Object userDetail(@RequestParam int idUserProfile){
+        return userProfileRepository.findById(idUserProfile).get();
+    }
+
 
     @PostMapping("/login")
     public Object login(@RequestParam String userName, @RequestParam String passWord) {
@@ -54,6 +62,27 @@ public class UserProfileController {
             res.setMsg("Login fail");
         }
         return res;
+    }
+
+    @PostMapping("/login1")
+    public Object login1(@RequestParam String userName, @RequestParam String passWord) {
+        String token = "";
+        Map response = new  HashMap();
+
+        UserProfile userProfile = userProfileRepository.findByUserNameAndPassWord(userName,passWord);
+        System.out.println(userProfile);
+
+        if (userProfile != null) {
+            token = "UgLGpUGhLIKyiRyGjKIYRvnRJFrOLyirEGFhMVKjGIYdUKvKJGhUEsdTy";
+            response.put("status", 0);
+            response.put("userId", userProfile.getIdUserProfile());
+
+        } else {
+            token = "";
+            response.put("status", 1);
+        }
+        response.put("token",token);
+        return response;
     }
 
     @PostMapping("/register")
