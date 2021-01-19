@@ -1,10 +1,6 @@
 package com.example.trading.entities;
 import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -15,13 +11,21 @@ public class Product {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_product")
     private int idProduct;
+    @Column(name = "id_user_shop")
     private int idUserShop;
+    @Column(name = "product_name")
     private String productName;
+    @Column(name = "product_price")
     private int productPrice;
+    @Column(name = "product_amount")
     private int productAmount;
+    @Column(name = "product_type")
     private String productType;
+    @Column(name = "product_sub_type")
     private String productSubType;
+    @Column(name = "product_img")
     private String productImg;
 
 }
