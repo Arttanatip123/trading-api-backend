@@ -22,6 +22,7 @@ public class UserProfileController {
     @Autowired
     private UserShopRepository userShopRepository;
 
+    APIResponse res = new APIResponse();
 
     @GetMapping("/save")
     public Object save(UserProfile userProfile) {
@@ -44,13 +45,24 @@ public class UserProfileController {
 
     @PostMapping("/user_detail")
     public Object userDetail(@RequestParam int idUserProfile){
-        return userProfileRepository.findById(idUserProfile).get();
+        UserProfile userProfileDb = userProfileRepository.findById(idUserProfile).get();
+        return userProfileDb;
+    }
+
+    @PostMapping("/user_update")
+    public Object userUpdate(UserProfile userProfile){
+        try {
+            userProfile = userProfileRepository.save(userProfile);
+            res.setStatus(0);
+        }catch (Exception e){
+            res.setStatus(1);
+        }
+        return res;
     }
 
 
     @PostMapping("/login")
     public Object login(@RequestParam String userName, @RequestParam String passWord) {
-        APIResponse res = new APIResponse();
         UserProfile userProfile = userProfileRepository.findByUserNameAndPassWord(userName,passWord);
         System.out.println(userProfile);
         if (userProfile != null) {
@@ -99,6 +111,7 @@ public class UserProfileController {
             userProfile = userProfileRepository.save(userProfile);      //บันทึกยูเซอร์
             res.setData(userProfile);
             userShop.setIdUserShop(userProfile.getIdUserProfile());     //เซ็ตไอดีให้ช็อปจากการดึงไอดีของยูเซอร์
+            userShop.setShopStatus("0");
             userShop = userShopRepository.save(userShop);       //บันทึกช็อป
             res.setUserId(userProfile.getIdUserProfile());      //เซ็ตไอดีที่บันทึกแล้ว เพื่อตอบกลับ
             res.setStatus(0);

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/shop")
@@ -25,10 +26,26 @@ public class UserShopController {
 
     }
 
-    @GetMapping("/detail/{idShop}")
-    public Object detail(@PathVariable int idShop){
+    @PostMapping("/detail")
+    public Object detail(@RequestParam int idUserShop){
+        UserShop userShopDb = new UserShop();
+        try {
+            userShopDb = userShopRepository.findById(idUserShop).get();
+            userShop = userShopDb;
+        }catch (Exception e){
+            res.setStatus(1);
+            userShop = null;
+        }
+        return userShop;
+    }
 
-        return userShopRepository.findById(idShop).get();
+    @PostMapping("/status")
+    public Object shopStatus(@RequestParam int idUserShop, @RequestParam String shopStatus){
+        UserShop userShopDb = userShopRepository.findById(idUserShop).get();
+        userShopDb.setShopStatus(shopStatus);
+        userShop = userShopRepository.save(userShopDb);
+        res.setStatus(0);
+        return res;
     }
 
 
@@ -54,11 +71,17 @@ public class UserShopController {
     public Object save(UserShop userShop, @RequestParam(value = "fileImg", required = false) MultipartFile fileImg){
         System.out.println(userShop);
         APIResponse res = new  APIResponse();
+        Random rnd = new Random();
         try{
             if (fileImg != null){
-                File fileToSave = new File("C://img//shop//" + userShop.getIdUserShop() + ".png");
+                char a = (char) (rnd.nextInt(26) + 'a');
+                File fileToSave = new File("C://img//shop//" + userShop.getIdUserShop() + String.valueOf(a) + ".png");
                 fileImg.transferTo(fileToSave);
-                userShop.setShopImg(userShop.getIdUserShop() + ".png");
+                userShop.setShopImg(userShop.getIdUserShop()+ String.valueOf(a) + ".png");
+                userShop = userShopRepository.save(userShop);
+                res.setData(userShop);
+                res.setStatus(0);
+            } else {
                 userShop = userShopRepository.save(userShop);
                 res.setData(userShop);
                 res.setStatus(0);

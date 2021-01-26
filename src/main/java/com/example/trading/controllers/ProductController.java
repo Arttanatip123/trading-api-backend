@@ -34,7 +34,6 @@ public class ProductController {
     
     @GetMapping("/list")   
     public Object list() {
-
         return productRepository.findAll();
     }
 
@@ -60,7 +59,7 @@ public class ProductController {
                 char b = (char) (rnd.nextInt(26) + 'a');
 
                 product.setIdProduct(count + 1);
-                product.setProductImg(count + 1 + String.valueOf(a) + String.valueOf(b) + ".png");
+                product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
 
                 File fileToSave = new File("C://img//product//" + product.getIdProduct()+ a + b + ".png");
                 fileImg.transferTo(fileToSave);
@@ -107,6 +106,12 @@ public class ProductController {
                 res.setData(product);
                 res.setMsg("Update Success");
                 res.setStatus(0);
+            }else{
+                System.out.println(product);
+                Product productDb = productRepository.findById(product.getIdProduct());
+                product.setProductImg(productDb.getProductImg());
+                product = productRepository.save(product);
+
             }
         }catch (Exception err){
             err.printStackTrace();
@@ -130,9 +135,16 @@ public class ProductController {
 
     @PostMapping("/remove")
     public Object remove(@RequestParam int productId){
-        productRepository.deleteById(productId);
-        res.setStatus(0);
-        res.setMsg("Remove product success!");
+        System.out.println(productId);
+        try{
+            productRepository.deleteById(productId);
+            res.setStatus(0);
+            res.setMsg("Remove product success!");
+
+        }catch (Exception e){
+            res.setStatus(1);
+        }
+
         return res;
     }
 
