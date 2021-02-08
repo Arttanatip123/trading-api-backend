@@ -4,6 +4,7 @@ import com.example.trading.entities.Product;
 import com.example.trading.entities.UserShop;
 import com.example.trading.service.APIResponse;
 import com.example.trading.service.ProductRepository;
+import com.example.trading.service.UserShopRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -19,8 +20,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 @RestController
@@ -31,10 +32,45 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserShopRepository userShopRepository;
     
     @GetMapping("/list")   
     public Object list() {
         return productRepository.findAll();
+    }
+
+    @PostMapping("/search")
+    public Object search(@RequestParam String value){
+        ArrayList shopArrList = new ArrayList();
+        ArrayList arrShop = new ArrayList();
+
+        List dataShop = userShopRepository.findByshopNameLike("%"+value+"%");
+        List dataProduct = productRepository.findByproductNameLike("%"+value+"%");
+
+        System.out.println(dataShop);
+        System.out.println(dataProduct);
+
+        for(int i=0; i<dataShop.size();i++){
+            UserShop userShopLst = (UserShop) dataShop.get(i);
+            arrShop.add(userShopLst.getIdUserShop());
+        }
+
+        for(int i=0; i<dataProduct.size();i++){
+            Product productLst = (Product) dataProduct.get(i);
+            arrShop.add(productLst.getIdUserShop());
+        }
+        Set set = new HashSet(arrShop);  //ลด idUserShop ที่ซ้ำกัน
+        arrShop.clear();
+        arrShop.addAll(set);
+
+        for (int i=0; i<arrShop.size(); i++){
+            UserShop userShop1 = userShopRepository.findById((Integer) arrShop.get(i)).get();
+            shopArrList.add(userShop1);
+        }
+        System.out.println(shopArrList);
+        return shopArrList;
     }
 
     @GetMapping("/detail/{idProduct}")

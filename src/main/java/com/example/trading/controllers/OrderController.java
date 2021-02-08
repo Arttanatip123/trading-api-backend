@@ -35,13 +35,20 @@ public class OrderController {
     @PostMapping("/makeorder")
     public Object makeOrder(@RequestParam int userId, int shopId, String timeReceive, int totalPrice, String product)  {
         Order order = new Order();
+        //TODO ดึงข้อมูล ผู้สั่ง
         UserProfile userProfile = userProfileRepository.findById(userId).get();
+        //TODO ดึงข้อมูลร้านปลายทาง
         UserShop userShop = userShopRepository.findById(shopId).get();
 
         order.setIdUserProfile(userId);
         order.setUserName(userProfile.getUserName());
         order.setIdUserShop(shopId);
         order.setShopName(userShop.getShopName());
+        //TODO หากไม่มีร้านค้านำ idShop ไปค้น userName มาแทน shopName
+        if(order.getShopName() == null){
+            UserProfile userProfile1 = userProfileRepository.findById(shopId).get();
+            order.setShopName(userProfile1.getUserName());
+        }
         order.setTimeReceive(timeReceive);
         order.setTotalPrice(totalPrice);
         order.setProductList(product);

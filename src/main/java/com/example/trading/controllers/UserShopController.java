@@ -42,9 +42,13 @@ public class UserShopController {
     @PostMapping("/status")
     public Object shopStatus(@RequestParam int idUserShop, @RequestParam String shopStatus){
         UserShop userShopDb = userShopRepository.findById(idUserShop).get();
-        userShopDb.setShopStatus(shopStatus);
-        userShop = userShopRepository.save(userShopDb);
-        res.setStatus(0);
+        if(userShopDb.getShopName() != null){
+            userShopDb.setShopStatus(shopStatus);
+            userShop = userShopRepository.save(userShopDb);
+            res.setStatus(0);
+        }else {
+            res.setStatus(1);
+        }
         return res;
     }
 
