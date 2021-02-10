@@ -20,6 +20,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.List;
 
@@ -90,13 +92,13 @@ public class ProductController {
         Random rnd = new Random();
         try {
             if (fileImg != null){
+                //TODO นับจำนวน reccord สินค้าในตาราง
                 int count = (int) productRepository.count();
                 char a = (char) (rnd.nextInt(26) + 'a');
                 char b = (char) (rnd.nextInt(26) + 'a');
 
                 product.setIdProduct(count + 1);
                 product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
-
                 File fileToSave = new File("C://img//product//" + product.getIdProduct()+ a + b + ".png");
                 fileImg.transferTo(fileToSave);
 
@@ -119,7 +121,7 @@ public class ProductController {
             if(fileImg != null){
                 Product productDb = productRepository.findById(product.getIdProduct());
 
-                //TODO Delete Old Img
+                //TODO ลบรูปภาพเดิมก่อน
                 File fileToDelete = new File("C://img//product//" + productDb.getProductImg());
 
                 if(fileToDelete.delete())
@@ -136,6 +138,7 @@ public class ProductController {
                 char b = (char) (rnd.nextInt(26) + 'a');
                 File fileToSave = new File("C://img//product//" + product.getIdProduct() + a + b + ".png");
                 fileImg.transferTo(fileToSave);
+
                 product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
                 product = productRepository.save(product);
 
@@ -162,7 +165,9 @@ public class ProductController {
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
             InputStream in = new FileInputStream("C://img//product//" + imageName);
-            return IOUtils.toByteArray(in);
+            var inImg =  IOUtils.toByteArray(in);
+            in.close();
+            return inImg;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -172,12 +177,18 @@ public class ProductController {
     @PostMapping("/remove")
     public Object remove(@RequestParam int productId){
         System.out.println(productId);
+        Product product = productRepository.findById(productId);
+        System.out.println(product);
         try{
+
+            File fileToDelete = new File("C://img//product//" + product.getProductImg());
+            Files.delete(Path.of(String.valueOf(fileToDelete)));
             productRepository.deleteById(productId);
             res.setStatus(0);
             res.setMsg("Remove product success!");
 
         }catch (Exception e){
+            e.printStackTrace();
             res.setStatus(1);
         }
 
