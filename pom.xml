@@ -18,6 +18,19 @@
 		<java.version>14</java.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-releases</id>
+			<url>https://repo.spring.io/libs-release</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<dependencies>
 
 		<dependency>
@@ -107,28 +120,14 @@
 
 	</dependencies>
 
-	<packaging>jar</packaging>
-	<distributionManagement>
 
-	</distributionManagement>
 
 	<build>
 		<plugins>
+			<!-- run $ mvn package, generating an executable jar -->
 			<plugin>
-				<!-- Build an executable JAR -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>com.example.trading.TradingApplication</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<goals>
-					<defaultGoal>install</defaultGoal>
-				</goals>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
