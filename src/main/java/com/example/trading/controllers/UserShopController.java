@@ -79,7 +79,7 @@ public class UserShopController {
         try{
             if (fileImg != null){
                 char a = (char) (rnd.nextInt(26) + 'a');
-                File fileToSave = new File("C://img//shop//" + userShop.getIdUserShop() + String.valueOf(a) + ".png");
+                File fileToSave = new File("//img//shop//" + userShop.getIdUserShop() + String.valueOf(a) + ".png");
                 fileImg.transferTo(fileToSave);
                 userShop.setShopImg(userShop.getIdUserShop()+ String.valueOf(a) + ".png");
                 userShop = userShopRepository.save(userShop);
@@ -102,7 +102,7 @@ public class UserShopController {
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
-            InputStream in = new FileInputStream("C://img//shop//" + imageName);
+            InputStream in = new FileInputStream("//img//shop//" + imageName);
             return IOUtils.toByteArray(in);
         }catch (Exception e){
             e.printStackTrace();
