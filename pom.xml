@@ -108,6 +108,9 @@
 	</dependencies>
 
 	<packaging>jar</packaging>
+	<distributionManagement>
+
+	</distributionManagement>
 
 	<build>
 		<plugins>
