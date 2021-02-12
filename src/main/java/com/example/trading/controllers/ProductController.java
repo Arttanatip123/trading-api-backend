@@ -99,7 +99,7 @@ public class ProductController {
 
                 product.setIdProduct(count + 1);
                 product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
-                File fileToSave = new File("home/tanatip99950/img/product/" + product.getIdProduct()+ a + b + ".png");
+                File fileToSave = new File("/home/tanatip99950/img/product/" + product.getIdProduct()+ a + b + ".png");
                 fileImg.transferTo(fileToSave);
 
                 product = productRepository.save(product);
@@ -122,7 +122,7 @@ public class ProductController {
                 Product productDb = productRepository.findById(product.getIdProduct());
 
                 //TODO ลบรูปภาพเดิมก่อน
-                File fileToDelete = new File("home/tanatip99950/img/product/" + productDb.getProductImg());
+                File fileToDelete = new File("/home/tanatip99950/img/product/" + productDb.getProductImg());
 
                 if(fileToDelete.delete())
                 {
@@ -136,7 +136,7 @@ public class ProductController {
                 //TODO Save Img, ImgName
                 char a = (char) (rnd.nextInt(26) + 'a');
                 char b = (char) (rnd.nextInt(26) + 'a');
-                File fileToSave = new File("home/tanatip99950/img/product/" + product.getIdProduct() + a + b + ".png");
+                File fileToSave = new File("/home/tanatip99950/img/product/" + product.getIdProduct() + a + b + ".png");
                 fileImg.transferTo(fileToSave);
 
                 product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
@@ -164,7 +164,7 @@ public class ProductController {
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
-            InputStream in = new FileInputStream("home/tanatip99950/img/product/" + imageName);
+            InputStream in = new FileInputStream("/home/tanatip99950/img/product/" + imageName);
             var inImg =  IOUtils.toByteArray(in);
             in.close();
             return inImg;
@@ -181,7 +181,7 @@ public class ProductController {
         System.out.println(product);
         try{
 
-            File fileToDelete = new File("home/tanatip99950/img/product/" + product.getProductImg());
+            File fileToDelete = new File("/home/tanatip99950/img/product/" + product.getProductImg());
             Files.delete(Path.of(String.valueOf(fileToDelete)));
             productRepository.deleteById(productId);
             res.setStatus(0);
