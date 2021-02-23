@@ -1,7 +1,9 @@
 package com.example.trading.controllers;
-import com.example.trading.entities.UserShop;
-import com.example.trading.service.APIResponse;
-import com.example.trading.service.UserShopRepository;
+import com.example.trading.config.Config;
+
+import com.example.trading.model.entities.UserShop;
+import com.example.trading.model.service.APIResponse;
+import com.example.trading.model.service.UserShopRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -79,7 +81,7 @@ public class UserShopController {
         try{
             if (fileImg != null){
                 char a = (char) (rnd.nextInt(26) + 'a');
-                File fileToSave = new File("/home/tanatip99950/img/shop/" + userShop.getIdUserShop() + String.valueOf(a) + ".png");
+                File fileToSave = new File(Config.IMG_SHOP_URL + userShop.getIdUserShop() + String.valueOf(a) + ".png");
                 fileImg.transferTo(fileToSave);
                 userShop.setShopImg(userShop.getIdUserShop()+ String.valueOf(a) + ".png");
                 userShop = userShopRepository.save(userShop);
@@ -102,7 +104,7 @@ public class UserShopController {
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
-            InputStream in = new FileInputStream("/home/tanatip99950/img/shop/" + imageName);
+            InputStream in = new FileInputStream(Config.IMG_SHOP_URL + imageName);
             return IOUtils.toByteArray(in);
         }catch (Exception e){
             e.printStackTrace();

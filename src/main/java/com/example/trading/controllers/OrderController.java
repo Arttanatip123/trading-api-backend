@@ -1,16 +1,19 @@
 package com.example.trading.controllers;
 
-import com.example.trading.entities.Order;
-import com.example.trading.entities.Product;
-import com.example.trading.entities.UserProfile;
-import com.example.trading.entities.UserShop;
-import com.example.trading.service.APIResponse;
-import com.example.trading.service.OrderRepository;
-import com.example.trading.service.UserProfileRepository;
-import com.example.trading.service.UserShopRepository;
+
+import com.example.trading.model.entities.Order;
+import com.example.trading.model.entities.UserProfile;
+import com.example.trading.model.entities.UserShop;
+import com.example.trading.model.service.APIResponse;
+import com.example.trading.model.service.OrderRepository;
+
+import com.example.trading.model.service.UserProfileRepository;
+import com.example.trading.model.service.UserShopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,18 +73,20 @@ public class OrderController {
     @PostMapping("/user")
     public Object getOrderUser(@RequestParam int userId){
         List<Order> orders = orderRepository.findAllByIdUserProfile(userId);
+        Collections.reverse(orders);
         return orders;
     }
+
     @PostMapping("/productbyid")
     public Object orderDetail(@RequestParam int idOrderList){
         Order order = orderRepository.findById(idOrderList).get();
-
         return order;
     }
 
     @PostMapping("/shop")
     public Object getOrderShop(@RequestParam int shopId){
         List<Order> orders = orderRepository.findAllByIdUserShop(shopId);
+        Collections.reverse(orders);
         return orders;
     }
 

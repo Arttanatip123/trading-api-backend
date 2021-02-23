@@ -1,13 +1,15 @@
 package com.example.trading.controllers;
-import com.example.trading.entities.UserProfile;
-import com.example.trading.entities.UserShop;
-import com.example.trading.service.APIResponse;
-import com.example.trading.service.UserProfileRepository;
-import com.example.trading.service.UserShopRepository;
+
+import com.example.trading.model.entities.UserProfile;
+import com.example.trading.model.entities.UserShop;
+import com.example.trading.model.service.APIResponse;
+import com.example.trading.model.service.UserProfileRepository;
+import com.example.trading.model.service.UserShopRepository;
 import com.sun.xml.bind.v2.TODO;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.trading.util.EncoderUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +21,12 @@ public class UserProfileController {
     int idCount;
     @Autowired
     private UserProfileRepository userProfileRepository;
+
     @Autowired
     private UserShopRepository userShopRepository;
+
+    @Autowired
+    private EncoderUtil encoderUtil;
 
     APIResponse res = new APIResponse();
 
@@ -108,6 +114,7 @@ public class UserProfileController {
             System.out.println(idCount);
             idCount = idCount + 1;                              //นำไอดีที่มีบวก 1
             userProfile.setIdUserProfile(idCount);                  //เซ็ตไอดีกลังจากบวกแล้ว
+            userProfile.setPassWord(encoderUtil.passwordEncoder().encode(userProfile.getPassWord()));
             userProfile = userProfileRepository.save(userProfile);      //บันทึกยูเซอร์
             res.setData(userProfile);
             userShop.setIdUserShop(userProfile.getIdUserProfile());     //เซ็ตไอดีให้ช็อปจากการดึงไอดีของยูเซอร์
