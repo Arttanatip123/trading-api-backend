@@ -104,9 +104,9 @@ public class UserShopController {
     @RequestMapping(value = "/image", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
-            InputStream in = new FileInputStream(Config.IMG_SHOP_URL + imageName);
-            var inImg =  IOUtils.toByteArray(in);
-            in.close();
+            InputStream inputStream = new FileInputStream(Config.IMG_SHOP_URL + imageName);
+            var inImg =  IOUtils.toByteArray(inputStream);
+            inputStream.close();
             return inImg;
         }catch (Exception e){
             e.printStackTrace();
