@@ -4,8 +4,8 @@ public class Config {
 //    public static final String IMG_SHOP_URL = "C:/img/shop/";
 //    public static final String IMG_PRODUCT_URL = "C:/img/product/";
 
-    public static final String IMG_SHOP_URL = "home/tanatip99950/img/shop/";
-    public static final String IMG_PRODUCT_URL = "home/tanatip99950/img/product/";
+    public static final String IMG_SHOP_URL = "/home/tanatip99950/img/shop/";
+    public static final String IMG_PRODUCT_URL = "/home/tanatip99950/img/product/";
 
 
     public static final int DASHBOARD_MOREDATA_SIZE = 10;
