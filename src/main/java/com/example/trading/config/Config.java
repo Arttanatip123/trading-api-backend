@@ -1,8 +1,12 @@
 package com.example.trading.config;
 
 public class Config {
-    public static final String IMG_SHOP_URL = "C:/img/shop/";
-    public static final String IMG_PRODUCT_URL = "C:/img/product/";
+//    public static final String IMG_SHOP_URL = "C:/img/shop/";
+//    public static final String IMG_PRODUCT_URL = "C:/img/product/";
+
+    public static final String IMG_SHOP_URL = "home/tanatip99950/shop/";
+    public static final String IMG_PRODUCT_URL = "home/tanatip99950/product/";
+
 
     public static final int DASHBOARD_MOREDATA_SIZE = 10;
 
