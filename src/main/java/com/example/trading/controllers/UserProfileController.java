@@ -5,6 +5,7 @@ import com.example.trading.model.entities.UserShop;
 import com.example.trading.model.service.APIResponse;
 import com.example.trading.model.service.UserProfileRepository;
 import com.example.trading.model.service.UserShopRepository;
+import com.example.trading.oauth2.TokenService;
 import com.sun.xml.bind.v2.TODO;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.example.trading.util.EncoderUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -27,6 +29,9 @@ public class UserProfileController {
 
     @Autowired
     private EncoderUtil encoderUtil;
+
+    @Autowired
+    private TokenService tokenService;
 
     APIResponse res = new APIResponse();
 
@@ -64,6 +69,24 @@ public class UserProfileController {
             res.setStatus(1);
         }
         return res;
+    }
+
+    @PostMapping("/update_password")
+    public  Object passwordUpdate(@RequestParam int idUserProfile, @RequestParam String oldPassword , @RequestParam String newPassword){
+        UserProfile userProfile = userProfileRepository.findById(idUserProfile).get();
+        Map<String, Object> ret = new HashMap<>();
+        if (encoderUtil.passwordEncoder().matches(oldPassword, userProfile.getPassWord())) {   //เช็คว่ารหัสเก่าที่ส่งมาตรงกับที่มีในตารางหรือไม่
+            userProfile.setPassWord(newPassword);           //เซ้ตรหัสใหม่ลงในออปเจค
+            ret.put("token", tokenService.createToken(userProfile));        //สร้าง token จากออปเจค
+            userProfile.setPassWord(encoderUtil.passwordEncoder().encode(userProfile.getPassWord()));   //เข้ารหัสพาส
+            userProfile = userProfileRepository.save(userProfile);  //บันทึกลงตาราง
+
+            ret.put("status", 0);
+            return Optional.of(ret);
+        } else {
+           ret.put("status", 1);
+            return Optional.of(ret);
+        }
     }
 
 
@@ -114,7 +137,7 @@ public class UserProfileController {
             System.out.println(idCount);
             idCount = idCount + 1;                              //นำไอดีที่มีบวก 1
             userProfile.setIdUserProfile(idCount);                  //เซ็ตไอดีกลังจากบวกแล้ว
-            userProfile.setPassWord(encoderUtil.passwordEncoder().encode(userProfile.getPassWord()));
+            userProfile.setPassWord(encoderUtil.passwordEncoder().encode(userProfile.getPassWord())); //เข้ารหัส password ก่อนบันทึกลงฐานข้อมูล
             userProfile = userProfileRepository.save(userProfile);      //บันทึกยูเซอร์
             res.setData(userProfile);
             userShop.setIdUserShop(userProfile.getIdUserProfile());     //เซ็ตไอดีให้ช็อปจากการดึงไอดีของยูเซอร์
