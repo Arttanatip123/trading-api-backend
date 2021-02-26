@@ -105,7 +105,9 @@ public class UserShopController {
     public byte[] getResource(@RequestParam String imageName) throws  Exception{
         try {
             InputStream in = new FileInputStream(Config.IMG_SHOP_URL + imageName);
-            return IOUtils.toByteArray(in);
+            var inImg =  IOUtils.toByteArray(in);
+            in.close();
+            return inImg;
         }catch (Exception e){
             e.printStackTrace();
         }
