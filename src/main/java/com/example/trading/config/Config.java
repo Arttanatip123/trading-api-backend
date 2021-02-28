@@ -17,7 +17,9 @@ public class Config {
     public static final String[] ALLOW_API_PATH = new String[]{
             "/token_check",
             "/user/register",
-            "/notificationscreen/list"
+            "/notificationscreen/list",
+            "/product/image",
+            "/shop/image"
     };
 
     public static final String[] ALLOW_URL = new String[]{
