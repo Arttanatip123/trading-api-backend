@@ -71,6 +71,48 @@ public class UserProfileController {
         return res;
     }
 
+    @PostMapping("/update_location")
+    public Object updateLocation(@RequestParam int idUserProfile, @RequestParam String userLat, @RequestParam String userLng){
+        System.out.println("Update location = "+ userLat + ","+userLng);
+        try {
+            System.out.println("Update location = "+ userLat + ","+userLng);
+            UserProfile userProfile = userProfileRepository.findById(idUserProfile).get();
+            userProfile.setUserLat(userLat);
+            userProfile.setUserLng(userLng);
+            userProfile = userProfileRepository.save(userProfile);
+            res.setStatus(0);
+        }catch (Exception e){
+            res.setStatus(1);
+        }
+        return res;
+    }
+
+    @PostMapping("/add_FCMToken")
+    public Object fcmToken(@RequestParam int idUserProfile, @RequestParam String fcmToken){
+        try {
+            UserProfile userProfile = userProfileRepository.findById(idUserProfile).get();
+            userProfile.setFcmToken(fcmToken);
+            userProfile = userProfileRepository.save(userProfile);
+            res.setStatus(0);
+        }catch (Exception e){
+            res.setStatus(1);
+        }
+        return res;
+    }
+
+    @PostMapping("/logout")
+    public Object logout(@RequestParam int idUserProfile){
+        try {
+            UserProfile userProfile = userProfileRepository.findById(idUserProfile).get();
+            userProfile.setFcmToken("");
+            userProfile = userProfileRepository.save(userProfile);
+            res.setStatus(0);
+        }catch (Exception e){
+            res.setStatus(1);
+        }
+        return res;
+    }
+
     @PostMapping("/update_password")
     public  Object passwordUpdate(@RequestParam int idUserProfile, @RequestParam String oldPassword , @RequestParam String newPassword){
         UserProfile userProfile = userProfileRepository.findById(idUserProfile).get();

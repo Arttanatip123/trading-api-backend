@@ -5,12 +5,11 @@ import com.example.trading.config.Config;
 import com.example.trading.model.entities.Product;
 import com.example.trading.model.entities.UserShop;
 import com.example.trading.model.service.APIResponse;
+import com.example.trading.model.service.Multi;
 import com.example.trading.model.service.ProductRepository;
 import com.example.trading.model.service.UserShopRepository;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -94,12 +92,11 @@ public class ProductController {
         Random rnd = new Random();
         try {
             if (fileImg != null){
-                //TODO นับจำนวน reccord สินค้าในตาราง
-                int count = (int) productRepository.count();
+                //int count = (int) productRepository.count();
                 char a = (char) (rnd.nextInt(26) + 'a');
                 char b = (char) (rnd.nextInt(26) + 'a');
 
-                product.setIdProduct(count + 1);
+                //.setIdProduct(count + 1);
                 product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
                 File fileToSave = new File( Config.IMG_PRODUCT_URL + product.getIdProduct()+ a + b + ".png");
                 fileImg.transferTo(fileToSave);
@@ -108,11 +105,22 @@ public class ProductController {
                 res.setData(product);
                 res.setStatus(0);
                 res.setMsg("Save Success...");
+                return res;
             }
         }catch (Exception err){
             res.setStatus(1);
             res.setMsg("err : " + err.toString());
+            return res;
         }
+        return res;
+    }
+
+    @GetMapping("/thread")
+    public Object thread(){
+        int idUserShop = 1;
+        Multi multi = new Multi();
+        System.out.println("Calling thread...");
+        multi.start();
         return res;
     }
 

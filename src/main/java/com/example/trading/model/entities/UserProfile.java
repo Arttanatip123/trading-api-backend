@@ -25,6 +25,11 @@ public class UserProfile {
     private String lastName;
     @Column(name = "phone_number")
     private String phoneNumber;
-
+    @Column(name = "user_lat")
+    private String userLat;
+    @Column(name = "user_lng")
+    private String userLng;
+    @Column(name = "fcm_token")
+    private String fcmToken;
 
 }
