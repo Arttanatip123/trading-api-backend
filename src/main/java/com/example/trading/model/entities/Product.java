@@ -1,9 +1,11 @@
 package com.example.trading.model.entities;
 
+import lombok.Data;
+
 import javax.annotation.Generated;
 import javax.persistence.*;
 
-import lombok.Data;
+
 
 @Data
 @Entity
