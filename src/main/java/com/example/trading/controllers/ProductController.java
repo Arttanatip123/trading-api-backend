@@ -40,7 +40,9 @@ public class ProductController {
     
     @GetMapping("/list")   
     public Object list() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        Collections.reverse(products);
+        return products;
     }
 
     @PostMapping("/search")
