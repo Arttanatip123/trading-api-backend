@@ -43,7 +43,6 @@ public class UserProfileController {
 
     @GetMapping("/list")
     public Object list() {
-
         return userProfileRepository.findAll();
 
     }
