@@ -3,11 +3,9 @@ package com.example.trading.controllers;
 import com.example.trading.config.Config;
 
 import com.example.trading.model.entities.Product;
+import com.example.trading.model.entities.UserProfile;
 import com.example.trading.model.entities.UserShop;
-import com.example.trading.model.service.APIResponse;
-import com.example.trading.model.service.Multi;
-import com.example.trading.model.service.ProductRepository;
-import com.example.trading.model.service.UserShopRepository;
+import com.example.trading.model.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +35,12 @@ public class ProductController {
 
     @Autowired
     private UserShopRepository userShopRepository;
+
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+
+    @Autowired
+    private NotificationService notificationService;
     
     @GetMapping("/list")   
     public Object list() {
@@ -93,21 +97,38 @@ public class ProductController {
         APIResponse res = new APIResponse();
         Random rnd = new Random();
         try {
-            if (fileImg != null){
-                //int count = (int) productRepository.count();
-                char a = (char) (rnd.nextInt(26) + 'a');
-                char b = (char) (rnd.nextInt(26) + 'a');
+//            if (fileImg != null){
+//                //int count = (int) productRepository.count();
+//                char a = (char) (rnd.nextInt(26) + 'a');
+//                char b = (char) (rnd.nextInt(26) + 'a');
+//
+//                //.setIdProduct(count + 1);
+//                product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
+//                File fileToSave = new File( Config.IMG_PRODUCT_URL + product.getIdProduct()+ a + b + ".png");
+//                fileImg.transferTo(fileToSave);
+//
+//                product = productRepository.save(product);
+//                res.setData(product);
+//                res.setStatus(0);
+//                res.setMsg("Save Success...");
+//                return res;
+//            }
+            //TODO เรียก Notification
+            UserProfile userProfileDb = userProfileRepository.findById(product.getIdUserShop()).get();
+            List<UserProfile> allUser = userProfileRepository.findAll();
+            for (int i = 0; i < allUser.size(); i++) {
+              double distance =  calculateDistance(
+                      Double.parseDouble(userProfileDb.getUserLat()),
+                      Double.parseDouble(userProfileDb.getUserLng()),
+                      Double.parseDouble(allUser.get(i).getUserLat()),
+                      Double.parseDouble(allUser.get(i).getUserLng())
+              );
+              if(distance <= 20.0){
+                  System.out.println(Double.toString(distance)  + " KM");
+                  notificationService.sendToDevice(allUser.get(i).getFcmToken(),"มีสินค้าใหม่บริเวณใกล้เคียง",product.getProductName()+" ถูกเพิ่มในระบบ");
 
-                //.setIdProduct(count + 1);
-                product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
-                File fileToSave = new File( Config.IMG_PRODUCT_URL + product.getIdProduct()+ a + b + ".png");
-                fileImg.transferTo(fileToSave);
+              }
 
-                product = productRepository.save(product);
-                res.setData(product);
-                res.setStatus(0);
-                res.setMsg("Save Success...");
-                return res;
             }
         }catch (Exception err){
             res.setStatus(1);
@@ -119,10 +140,10 @@ public class ProductController {
 
     @GetMapping("/thread")
     public Object thread(){
-        int idUserShop = 1;
-        Multi multi = new Multi();
+        Thread thread = new Thread(new Multi());
         System.out.println("Calling thread...");
-        multi.start();
+        thread.start();
+        System.out.println("Called thread...");       
         return res;
     }
 
@@ -206,6 +227,21 @@ public class ProductController {
 
         return res;
     }
+    public double calculateDistance(double lat1, double lon1, double lat2, double lon2){
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344;
 
+        return (dist);
+    }
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
 
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
 }

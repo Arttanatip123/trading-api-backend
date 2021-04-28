@@ -1,11 +1,15 @@
 package com.example.trading.model.service;
 
 
-public class Multi extends Thread {
-    public void run(int idUserShop){
-        System.out.println("Thread running...");
-    }
+import lombok.Data;
 
-    public void start(int idUserShop) {
+public class Multi extends Thread {
+
+    @Override
+    public void run(){
+        System.out.println("Thread running...");
+
     }
 }
+
+
