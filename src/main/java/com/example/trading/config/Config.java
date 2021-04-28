@@ -1,11 +1,11 @@
 package com.example.trading.config;
 
 public class Config {
-   public static final String IMG_SHOP_URL = "C:/img/shop/";
-   public static final String IMG_PRODUCT_URL = "C:/img/product/";
+//   public static final String IMG_SHOP_URL = "C:/img/shop/";
+//   public static final String IMG_PRODUCT_URL = "C:/img/product/";
 
-//    public static final String IMG_SHOP_URL = "/home/tanatip99960/img/shop/";
-//    public static final String IMG_PRODUCT_URL = "/home/tanatip99960/img/product/";
+    public static final String IMG_SHOP_URL = "/home/tanatip99960/img/shop/";
+    public static final String IMG_PRODUCT_URL = "/home/tanatip99960/img/product/";
 
 
     public static final int DASHBOARD_MOREDATA_SIZE = 10;
@@ -21,7 +21,6 @@ public class Config {
             "/product/image",
             "/shop/image",
             "/user/add_FCMToken",
-            "notification/topic"
     };
 
     public static final String[] ALLOW_URL = new String[]{
