@@ -97,22 +97,22 @@ public class ProductController {
         APIResponse res = new APIResponse();
         Random rnd = new Random();
         try {
-//            if (fileImg != null){
-//                //int count = (int) productRepository.count();
-//                char a = (char) (rnd.nextInt(26) + 'a');
-//                char b = (char) (rnd.nextInt(26) + 'a');
-//
-//                //.setIdProduct(count + 1);
-//                product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
-//                File fileToSave = new File( Config.IMG_PRODUCT_URL + product.getIdProduct()+ a + b + ".png");
-//                fileImg.transferTo(fileToSave);
-//
-//                product = productRepository.save(product);
-//                res.setData(product);
-//                res.setStatus(0);
-//                res.setMsg("Save Success...");
-//                return res;
-//            }
+            if (fileImg != null){
+                //int count = (int) productRepository.count();
+                char a = (char) (rnd.nextInt(26) + 'a');
+                char b = (char) (rnd.nextInt(26) + 'a');
+
+                //.setIdProduct(count + 1);
+                product.setProductImg(product.getIdProduct() + String.valueOf(a) + String.valueOf(b) + ".png");
+                File fileToSave = new File( Config.IMG_PRODUCT_URL + product.getIdProduct()+ a + b + ".png");
+                fileImg.transferTo(fileToSave);
+
+                product = productRepository.save(product);
+                res.setData(product);
+                res.setStatus(0);
+                res.setMsg("Save Success...");
+                return res;
+            }
             //TODO เรียก Notification
             UserProfile userProfileDb = userProfileRepository.findById(product.getIdUserShop()).get();
             List<UserProfile> allUser = userProfileRepository.findAll();
@@ -125,8 +125,7 @@ public class ProductController {
               );
               if(distance <= 20.0){
                   System.out.println(Double.toString(distance)  + " KM");
-                  notificationService.sendToDevice(allUser.get(i).getFcmToken(),"มีสินค้าใหม่บริเวณใกล้เคียง",product.getProductName()+" ถูกเพิ่มในระบบ");
-
+                  notificationService.sendToDevice(allUser.get(i).getFcmToken(),"แจ้งเตือนสินค้าใหม่","สินค้า " + product.getProductName()+" พร้อมจำหน่ายบริเวณใกล้เคียง");
               }
 
             }
